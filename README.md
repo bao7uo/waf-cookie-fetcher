@@ -2,8 +2,8 @@
 [![Language](https://img.shields.io/badge/Lang-Python-blue.svg)](https://www.python.org)
 [![License](https://img.shields.io/badge/License-Apache%202.0-red.svg)](https://opensource.org/licenses/Apache-2.0)
 
-#### This extension registers custom session handling rule actions which can be used to...
-- easily add client-side cookies to Burp's cookie jar on demand when Burp cannot otherwise detect them, for example if they have been obfuscated by a WAF
+#### This extension registers custom session handling rule actions which can...
+- use PhantomJS to obtain security cookies generated in the browser by client-side code and add them to Burp's cookie jar
 - selectively remove specific cookies from Burp's cookie jar
 - empty Burp's cookie jar, for example to ensure only the desired cookies (or no cookies at all) are available to Burp
 
@@ -11,18 +11,18 @@
 
 ![CookieMonster screenshot](https://github.com/bao7uo/CookieMonster/raw/master/images/title_screenshot.png)
 
-CookieMonster is a Burp Suite Extension which allows web application security testers to register various types of cookie-related session handling actions to be performed by the Burp session handling rules.
+CookieMonster is a Burp Suite extension which allows web application security testers to register various types of cookie-related session handling actions to be performed by the Burp session handling rules.
 
-The extension can be used to add obfuscated WAF client-side cookies to Burp's cookie jar. If Burp cannot detect updates to WAF cookies and update the Burp cookie jar, then after a short time the WAF will block any requests from Burp which don't contain the updated value. This makes it very difficult to use important Burp features such as the Scanner and Intruder.
+The extension can be used to add cookies to Burp's cookie jar which originate from a WAF or other bot defense system but are set in the browser using client-side code. Burp cannot normally detect these cookies without a request from the browser, which will not happen automatically during active scanning and intruder attacks etc. Therefore when the new cookie value is sent by the WAF's bot defense system, Burp doesn't update its cookie jar. This means that any requests which don't contain the updated value will be blocked. This makes it very difficult to use important Burp features such as the Scanner and Intruder when these bot defenses have been employed.
 
-CookieMonster defeats the WAF by generating a generic PhantomJS script and then calls the PhantomJS binary with the necessary parameters to run the script which loads the web page and waits for the JavaScript to set the cookie, which is then returned by PhantomJS and picked up by the Burp extension. Tests showed that calling the PhantomJS binary was quicker than using Selenium etc. and also it means there are less dependencies.
+CookieMonster defeats these defense techniques by generating a generic PhantomJS script and calling the PhantomJS binary with the necessary parameters to run the script. The script then loads the web page and waits for the JavaScript to set the cookie, which is then returned by PhantomJS and picked up by the Burp extension. Tests showed that calling the PhantomJS binary was quicker than using Selenium etc. Using the binary directly also means that there are less dependencies to run CookieMonster.
 
-The other action types are the removal of specific named cookies from Burp's cookie jar, and the ability to empty the whole jar. These additional features add some helpful flexibility when using more complex session handling rulesets, to ensure the session remains valid by avoiding problematic cookies or to ensure specific application code-paths are properly tested.
+The other action types allow features such as the removal of specific named cookies from Burp's cookie jar, and the ability to empty the whole jar. These additional features add some helpful flexibility when using more complex session handling rulesets, to ensure the session remains valid by avoiding problematic cookies or to ensure specific application code-paths are properly tested.
 
 ## Requirements
 
 - Configure Burp Extender Python Environment (Jython)
-- PhantomJS which can either be downloaded and installed from http://phantomjs.org/download.html
+- PhantomJS which can be downloaded and installed from http://phantomjs.org/download.html
 
 ## Demo
 
