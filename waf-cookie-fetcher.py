@@ -1,7 +1,7 @@
 #
-#   CookieMonster Burp extension
+#   WAF Cookie Fetcher Burp extension
 #
-#   Copyright (C) 2017 Paul Taylor
+#   Copyright (C) 2017-2018 Paul Taylor
 #
 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +51,7 @@ class PhantomJS():
 
     uri = "http://phantomjs.org/api/command-line.html"
 
-    script_name = "BApp.CookieMonster.phantomjs.tmp"
+    script_name = "BApp.waf-cookie-fetcher.phantomjs.tmp"
     script_path = None
     script_data = """\
 var system = require("system");
@@ -602,7 +602,7 @@ class Panel_Fetch_Update_Cookies(JPanel):
                     PTTextField(
                             "url",
                             "Obtain cookies from this URL: ",
-                            "https://pages.bao7uo.com/CookieMonster_test.html", None
+                            "https://pages.bao7uo.com/waf-cookie-fetcher_test.html", None
                         ),
                     PTTextField(
                             "duration",
@@ -903,7 +903,7 @@ class Panel_Extension(JPanel):
 
         self._button_quit = \
             JButton(
-                    "Unload CookieMonster extension",
+                    "Unload WAF Cookie Fetcher",
                     actionPerformed=self._button_quit_pressed
                     )
 
@@ -958,7 +958,7 @@ class tabpanel(JPanel, Scrollable):
 class PTTab(ITab):
 
     def getTabCaption(self):
-        return "CookieMonster"
+        return "WAF Cookie Fetcher"
 
     def getUiComponent(self):
         return self.scrollpane
@@ -978,7 +978,7 @@ class PTTab(ITab):
 
 class BurpExtender(IBurpExtender):
 
-    extension_name = "CookieMonster"
+    extension_name = "WAF Cookie Fetcher"
 
     def registerExtenderCallbacks(self, callbacks):
 

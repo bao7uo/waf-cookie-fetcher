@@ -16,7 +16,7 @@
                                 "type":"use_cookies"
                             }
                         ],
-                        "description":"CookieMonster demo",
+                        "description":"WAF Cookie Fetcher demo",
                         "enabled":true,
                         "exclude_from_scope":[],
                         "include_in_scope":[],

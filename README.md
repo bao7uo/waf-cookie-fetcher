@@ -1,4 +1,4 @@
-# CookieMonster - A Burp Suite Extension
+# WAF Cookie Fetcher - A Burp Suite Extension
 [![Language](https://img.shields.io/badge/Lang-Python-blue.svg)](https://www.python.org)
 [![License](https://img.shields.io/badge/License-Apache%202.0-red.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -9,13 +9,13 @@
 
 ## Overview
 
-![CookieMonster screenshot](https://github.com/bao7uo/CookieMonster/raw/master/images/title_screenshot.png)
+![WAF Cookie Fetcher screenshot](https://github.com/bao7uo/waf-cookir-fetcher/raw/master/images/title_screenshot.png)
 
-CookieMonster is a Burp Suite extension which allows web application security testers to register various types of cookie-related session handling actions to be performed by the Burp session handling rules.
+WAF Cookie Fetcher is a Burp Suite extension which allows web application security testers to register various types of cookie-related session handling actions to be performed by the Burp session handling rules.
 
 The extension can be used to add cookies to Burp's cookie jar which originate from a WAF or other bot defense system but are set in the browser using client-side code. Burp cannot normally detect updates to the values of these cookies without a request from the browser, which will not happen automatically during active scanning and intruder attacks etc. Therefore when the obfuscated new cookie value, or code to calculate the value is sent by the WAF's bot defense system, Burp doesn't update its cookie jar. This means that any requests which don't contain the updated value will be blocked. This makes it very difficult to use important Burp features such as the Scanner and Intruder when these bot defenses have been employed.
 
-CookieMonster defeats these defense techniques by generating a generic PhantomJS script and calling the PhantomJS binary with the necessary parameters to run the script. The script then loads the web page and waits for the JavaScript to set the cookie, which is then returned by PhantomJS and picked up by the Burp extension. Tests showed that calling the PhantomJS binary was quicker than using Selenium etc. Using the binary directly also means that there are less dependencies to run CookieMonster.
+WAF Cookie Fetcher defeats these defense techniques by generating a generic PhantomJS script and calling the PhantomJS binary with the necessary parameters to run the script. The script then loads the web page and waits for the JavaScript to set the cookie, which is then returned by PhantomJS and picked up by the Burp extension. Tests showed that calling the PhantomJS binary was quicker than using Selenium etc. Using the binary directly also means that there are less dependencies to run WAF Cookie Fetcher.
 
 The other action types allow features such as the removal of specific named cookies from Burp's cookie jar, and the ability to empty the whole jar. These additional features add some helpful flexibility when using more complex session handling rulesets, to ensure the session remains valid by avoiding problematic cookies or to ensure specific application code-paths are properly tested.
 
@@ -30,15 +30,15 @@ A lab page is provided (hosted on GitHub Pages) to try out the extension.
 
 #### Step-by-step
 
-- Load CookieMonster extension in Burp
+- Load WAF Cookie Fetcher extension in Burp
 - By default the extension contains the correct settings for the demo, so just click 'Add a new "Get cookies" session handler with these settings for these cookies'
-- Then go to Burp's project options tab, navigate to the Sessions Handling Rules section and click on the options cog icon to load the JSON options file from CookieMonster's demo folder (https://github.com/bao7uo/CookieMonster/raw/master/demo/CookieMonster_test.json). This will add the session handling rule and actions
-- Go to Burp's repeater tab and paste the contents of the txt file from the demo folder (https://github.com/bao7uo/CookieMonster/raw/master/demo/Repeater.txt)
+- Then go to Burp's project options tab, navigate to the Sessions Handling Rules section and click on the options cog icon to load the JSON options file from WAF Cookie Fetcher's demo folder (https://github.com/bao7uo/waf-cookie-fetcher/raw/master/demo/waf-cookie-fetcher_test.json). This will add the session handling rule and actions
+- Go to Burp's repeater tab and paste the contents of the txt file from the demo folder (https://github.com/bao7uo/waf-cookie-fetcher/raw/master/demo/Repeater.txt)
 - Add the correct target hostname (pages.bao7uo.com) and port 80 to Repeater
 
-![CookieMonster Demo screenshot](https://github.com/bao7uo/CookieMonster/raw/master/images/demo_screenshot.png)
+![WAF Cookie Fetcher demo screenshot](https://github.com/bao7uo/waf-cookie-fetcher/raw/master/images/demo_screenshot.png)
 
-If a cookie appears and the value changes every time you click "Go" in repeater, then the demo is working. As you will be able to see, the JavaScript response from the server is obfuscated, but CookieMonster is obtaining the correct value and placing it in the cookie jar, and Burp is then adding it to the Repeater Request.
+If a cookie appears and the value changes every time you click "Go" in repeater, then the demo is working. As you will be able to see, the JavaScript response from the server is obfuscated, but WAF Cookie Fetcher is obtaining the correct value and placing it in the cookie jar, and Burp is then adding it to the Repeater Request.
 
 ## Usage
 
@@ -46,11 +46,11 @@ If a cookie appears and the value changes every time you click "Go" in repeater,
 
 - It is preferable to use Burp's session management rules to check whether the session is valid so that this extension is only invoked when necessary, to avoid unnecessary PhantomJS requests. Any unnecessary requests could reduce Active Scan or Intruder Attack performance when they are relying on this extension.
 
-### CookieMonster settings for obtaining cookies
+### WAF Cookie Fetcher settings for obtaining cookies
 
 The settings/fields shown in the following screenshot are explained in this section.
 
-![CookieMonster settings screenshot](https://github.com/bao7uo/CookieMonster/raw/master/images/settings_screenshot.png)
+![WAF Cookie Fetcher settings screenshot](https://github.com/bao7uo/waf-cookie-fetcher/raw/master/images/settings_screenshot.png)
 
 #### Set cookies to be valid for domain
 
@@ -90,11 +90,12 @@ The settings/fields shown in the following screenshot are explained in this sect
 - For best results, it is usually appropriate to add a 'Check session is valid' rule action, located before the 'Get cookies' rule action.
 - The .json file in the demo folder of this repository provides a simple example of a rule with working actions
 
-## CookieMonster Roadmap
+## WAF Cookie Fetcher Roadmap
 
 This project is still under development.
 
 #### Potential future improvements:
+- "Test" button to pull in cookies and add them to list
 - Improve UI
 - Nomenclature
 - MVC pattern
@@ -111,6 +112,6 @@ Contributions, feedback and ideas will be appreciated.
 
 ## License notice
 
-Copyright (C) 2017 Paul Taylor
+Copyright (C) 2017-2018 Paul Taylor
 
 See LICENSE file for details.
