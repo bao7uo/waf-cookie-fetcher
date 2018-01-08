@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-red.svg)](https://opensource.org/licenses/Apache-2.0)
 
 #### This extension registers custom session handling rule actions which can...
-- use PhantomJS to obtain security cookies generated in the browser by client-side code and add them to Burp's cookie jar
+- use a headless webkit/browser (PhantomJS) to obtain the values of WAF-injected cookies which are calculated in the browser by client-side JavaScript code and then add them to Burp's cookie jar
 - selectively remove specific cookies from Burp's cookie jar
 - empty Burp's cookie jar, for example to ensure only the desired cookies (or no cookies at all) are available to Burp
 
@@ -13,7 +13,7 @@
 
 CookieMonster is a Burp Suite extension which allows web application security testers to register various types of cookie-related session handling actions to be performed by the Burp session handling rules.
 
-The extension can be used to add cookies to Burp's cookie jar which originate from a WAF or other bot defense system but are set in the browser using client-side code. Burp cannot normally detect these cookies without a request from the browser, which will not happen automatically during active scanning and intruder attacks etc. Therefore when the new cookie value is sent by the WAF's bot defense system, Burp doesn't update its cookie jar. This means that any requests which don't contain the updated value will be blocked. This makes it very difficult to use important Burp features such as the Scanner and Intruder when these bot defenses have been employed.
+The extension can be used to add cookies to Burp's cookie jar which originate from a WAF or other bot defense system but are set in the browser using client-side code. Burp cannot normally detect updates to the values of these cookies without a request from the browser, which will not happen automatically during active scanning and intruder attacks etc. Therefore when the obfuscated new cookie value, or code to calculate the value is sent by the WAF's bot defense system, Burp doesn't update its cookie jar. This means that any requests which don't contain the updated value will be blocked. This makes it very difficult to use important Burp features such as the Scanner and Intruder when these bot defenses have been employed.
 
 CookieMonster defeats these defense techniques by generating a generic PhantomJS script and calling the PhantomJS binary with the necessary parameters to run the script. The script then loads the web page and waits for the JavaScript to set the cookie, which is then returned by PhantomJS and picked up by the Burp extension. Tests showed that calling the PhantomJS binary was quicker than using Selenium etc. Using the binary directly also means that there are less dependencies to run CookieMonster.
 
