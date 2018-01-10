@@ -101,7 +101,7 @@ This project is still under development.
 - Exception handling
 
 #### Potential future features may include:
-- [x] "Test" button to pull in cookies and add them to list
+- [x] "Test" button to pull in cookies and add them to list (IMPLEMENTED)
 - Automatically add demo to session rules and repeater
 - Send target URL to repeater
 - Burp session management configuration profiles (using load/saveConfigAsJson)
