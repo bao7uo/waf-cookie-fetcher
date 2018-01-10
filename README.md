@@ -9,7 +9,7 @@
 
 ## Overview
 
-![WAF Cookie Fetcher screenshot](https://github.com/bao7uo/waf-cookir-fetcher/raw/master/images/title_screenshot.png)
+![WAF Cookie Fetcher screenshot](https://github.com/bao7uo/waf-cookie-fetcher/raw/master/images/title_screenshot.png)
 
 WAF Cookie Fetcher is a Burp Suite extension which allows web application security testers to register various types of cookie-related session handling actions to be performed by the Burp session handling rules.
 
