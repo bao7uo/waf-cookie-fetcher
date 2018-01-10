@@ -24,7 +24,7 @@ from javax.swing import \
     JLabel, JTextField, JButton, JComboBox, \
     JList, DefaultListModel, ListSelectionModel, \
     JMenuItem, JPopupMenu, \
-    JFileChooser
+    JFileChooser, JOptionPane
 
 from java.awt import Desktop, Toolkit
 from java.awt.event import ActionListener
@@ -528,6 +528,62 @@ class PTSeparator(JSeparator):
 
 class Panel_Fetch_Update_Cookies(JPanel):
 
+    def _cookie_fetch_test(self, msg):
+
+        test_values = {}  # next few lines are similar to update_values()
+        for field in self.fields:
+            if "getText" in dir(field) and "getName" in dir(field):
+                value = field.getText()
+                test_values[field.getName()] = value
+
+        cookies_from_phantom = PhantomJS.read(
+                                              test_values["phantomJS_path"],
+                                              test_values["phantomJS_args"],
+                                              test_values["url"],
+                                              test_values["duration"]
+                                            )[0]
+        cookie_count = len(cookies_from_phantom)
+
+        cb.callbacks.printOutput(
+                                    "Cookie Fetch Test results: " +
+                                    str(cookie_count) +
+                                    " cookies received."
+                                )
+
+        add_to_list = False
+        if cookie_count > 0:
+            result_text = (
+                        "Cookie Fetch Test results:\n\n" +
+                        str(cookie_count) +
+                        " cookies received.\n\n" +
+                        "See extender stdout log for names and values.\n\n" +
+                        "Would you like to add all of the fetched cookie " +
+                        "names to the \"Cookies to obtain\" list?"
+                    )
+            if JOptionPane.showConfirmDialog(
+                            self,
+                            result_text,
+                            "Burp Suite / WAF Cookie Fetcher",
+                            JOptionPane.YES_NO_OPTION
+                        ) == JOptionPane.YES_OPTION:
+                add_to_list = True
+        else:
+            JOptionPane.showMessageDialog(
+                self,
+                "Cookie Fetch Test results:\n\n" +
+                "No cookies received"
+            )
+
+        for cookie in cookies_from_phantom:
+            cookie_name = cookie[u"name"]
+            cookie_value = cookie[u"value"]
+            if add_to_list: self._rowpanel2.addelement(cookie_name)
+            cb.callbacks.printOutput(
+                                cookie_name +
+                                ": " +
+                                cookie_value
+                            )
+
     def _load_values(self):
         for field in self.fields:
             if "setText" in dir(field) \
@@ -536,7 +592,7 @@ class Panel_Fetch_Update_Cookies(JPanel):
                 value = self.values[field.getName()]
                 field.setText(value)
 
-    def _update_values(self):
+    def _update_values(self):   # similar to first part of  _cookie_fetch_test
         for field in self.fields:
             if "getText" in dir(field) and "getName" in dir(field):
                 value = field.getText()
@@ -644,6 +700,20 @@ class Panel_Fetch_Update_Cookies(JPanel):
         for field in self.fields:
             self._rowpanel1.add(field)
 
+        _panel_test = JPanel()
+        _panel_test.add(Box.createHorizontalGlue())
+        _panel_test.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5))
+
+        _button_test = JButton(
+                        "Verify these settings and fetch cookies now",
+                        actionPerformed=self._cookie_fetch_test
+                    )
+        _panel_test.add(_button_test)
+
+        self._rowpanel1.add(_panel_test)
+
+        self._rowpanel1.add(PTSeparator())
+
         self._rowpanel3.add(Box.createHorizontalGlue())
         self._rowpanel3.add(self._button_update)
 
@@ -739,6 +809,8 @@ class Panel_Extension(JPanel):
         self.parent.panel_update_cookies._update_values()
         values = self.parent.panel_update_cookies.values
         for key in values.keys():
+            if key is None:
+                break
             loaded = cb.callbacks.loadExtensionSetting(profile + "_" + key)
             if loaded is None:
                 break
