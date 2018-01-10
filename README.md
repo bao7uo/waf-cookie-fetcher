@@ -95,13 +95,14 @@ The settings/fields shown in the following screenshot are explained in this sect
 This project is still under development.
 
 #### Potential future improvements:
-- "Test" button to pull in cookies and add them to list
 - Improve UI
 - Nomenclature
 - MVC pattern
 - Exception handling
 
 #### Potential future features may include:
+- [x] "Test" button to pull in cookies and add them to list
+- Automatically add demo to session rules and repeater
 - Send target URL to repeater
 - Burp session management configuration profiles (using load/saveConfigAsJson)
 - Allow cookie names to be specified as a regex, or to add all cookies found by PhantomJS
