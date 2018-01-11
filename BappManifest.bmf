@@ -6,6 +6,6 @@ ScreenVersion: 1.0
 SerialVersion: 1
 MinPlatformVersion: 0
 ProOnly: False
-Author: Paul Taylor
-ShortDescription: Fetches JavaSciprt cookies into the Burp cookie jar; useful to handle WAFs.
+Author: Paul Taylor / Foregenix Ltd
+ShortDescription: Fetches JavaScript cookies into the Burp cookie jar; useful to handle WAFs.
 EntryPoint: waf-cookie-fetcher.py
