@@ -38,13 +38,70 @@ from subprocess import Popen, PIPE
 
 from json import loads as json_loads
 
+from urlparse import urlparse
 
 class cb():
 
     callbacks = None
 
+    demo_url = "http://pages.bao7uo.com/waf-cookie-fetcher_test.html"
+    demo_domain = "bao7uo.com"
+    demo_cookie = "ClientSideCookie"
+
+    demo_json = """\
+{"project_options":{"sessions":
+{
+    "session_handling_rules":
+    {
+        "rules":
+        [
+            {"actions":
+                [
+                  {
+                    "action_name":"Get cookies (bao7uo.com): ClientSideCookie",
+                    "enabled":true,
+                    "type":"invoke_extension"
+                  },
+                  {
+                    "enabled":true,
+                    "match_cookies":"all_except",
+                    "type":"use_cookies"
+                  }
+                ],
+                "description":"WAF Cookie Fetcher demo",
+                "enabled":true,
+                "exclude_from_scope":[],
+                "include_in_scope":[],
+                "named_params":[],
+                "restrict_scope_to_named_params":false,
+                "tools_scope":
+                    ["Target","Spider","Scanner","Intruder","Repeater","Sequencer"],
+                "url_scope":"all",
+                "url_scope_advanced_mode":false
+            },
+        ]
+    }
+} } }
+"""
+
     def __init__(self, callbacks):
         cb.callbacks = callbacks
+        cb.helpers = callbacks.getHelpers()
+
+    @staticmethod
+    def send_url_to_repeater(url):
+        request = cb.helpers.buildHttpRequest(URI(url).toURL())
+
+        parsed_url = urlparse(url)
+        port = parsed_url.port
+        port = int(port) if port is not None else 80
+        cb.callbacks.sendToRepeater(
+                        parsed_url.hostname,
+                        port,
+                        True if parsed_url.scheme == "https" else False,
+                        request,
+                        "WCF"
+                    )
 
 
 class PhantomJS():
@@ -324,7 +381,7 @@ class PTTextField(JPanel):
     def getText(self):
         return self._textfield.getText()
 
-    def __init__(self, name, label, text, function=None, button=None):
+    def __init__(self, name, label, text, function=None, button1=None, button2=None):
 
         length = 1000
         self._name = name
@@ -334,9 +391,12 @@ class PTTextField(JPanel):
             else JTextField(length, actionPerformed=function)
         self.add(self._label)
         self.add(self._textfield)
-        if button is not None:
-            self._button = button
-            self.add(self._button)
+        if button1 is not None:
+            self._button1 = button1
+            self.add(self._button1)
+        if button2 is not None:
+            self._button2 = button2
+            self.add(self._button2)
         self.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5))
         self._textfield.setText("0" * length)
         self._textfield.setMaximumSize(self._textfield.getPreferredSize())
@@ -610,7 +670,7 @@ class Panel_Fetch_Update_Cookies(JPanel):
         self._update_values()
         listElements = self._rowpanel2.getAllElements()
         if len(listElements) > 0:
-            self.sha_fetch_update = SHA_Fetch_Update_Cookies(
+            SHA_Fetch_Update_Cookies(
                 self.values["phantomJS_path"],
                 self.values["phantomJS_args"],
                 self.values["url"],
@@ -624,9 +684,27 @@ class Panel_Fetch_Update_Cookies(JPanel):
         if binary is not None:
             self._set_value("phantomJS_path", binary)
 
-    def _button_args_pressed(self, msg):
+    def _get_btn_field_value(self, msg):
+        field = msg.getSource().getParent()
+        field_name = field.getName()
+        field_value = field.getText()
+        return [field_name, field_value]
 
-        Desktop.getDesktop().browse(URI(PhantomJS.uri))
+    def _button_web_browser_pressed(self, msg):
+        url = "http://pages.bao7uo.com"
+
+        field = self._get_btn_field_value(msg)
+
+        if field[0] == "phantomJS_args":
+            url = PhantomJS.uri
+        elif field[0] == "url":
+            url = field[1]
+
+        Desktop.getDesktop().browse(URI(url))
+
+    def _button_repeater_pressed(self, msg):
+        url = self._get_btn_field_value(msg)[1]
+        cb.send_url_to_repeater(url)
 
     def __init__(self):
 
@@ -634,7 +712,7 @@ class Panel_Fetch_Update_Cookies(JPanel):
                     PTTextField(
                             "domain",
                             "Set cookies to be valid for domain: ",
-                            "bao7uo.com", None
+                            cb.demo_domain, None
                         ),
                     PTSeparator(),
                     PTTextField(
@@ -646,19 +724,29 @@ class Panel_Fetch_Update_Cookies(JPanel):
                             )
                         ),
                     PTTextField(
-                            "phantomJS_args", "Optional PhantomJS arguments: ",
+                            "phantomJS_args",
+                            "Optional PhantomJS arguments: ",
                             "--ignore-ssl-errors=true" +
                             " --web-security=false",
                             None,
                             JButton(
                                 PhantomJS.uri,
-                                actionPerformed=self._button_args_pressed
+                                actionPerformed=self._button_web_browser_pressed
                             )
                         ),
                     PTTextField(
                             "url",
                             "Obtain cookies from this URL: ",
-                            "https://pages.bao7uo.com/waf-cookie-fetcher_test.html", None
+                            cb.demo_url,
+                            None,
+                            JButton(
+                                "Open in Browser",
+                                actionPerformed=self._button_web_browser_pressed
+                            ),
+                            JButton(
+                                "Send to Repeater",
+                                actionPerformed=self._button_repeater_pressed
+                            )
                         ),
                     PTTextField(
                             "duration",
@@ -686,7 +774,7 @@ class Panel_Fetch_Update_Cookies(JPanel):
                                         )
                         )
 
-        self._rowpanel2 = PTListPanel("Cookies to obtain", ["ClientSideCookie"])
+        self._rowpanel2 = PTListPanel("Cookies to obtain", [cb.demo_cookie])
 
         self._rowpanel3 = JPanel()
         self._rowpanel3.setLayout(BoxLayout(self._rowpanel3, BoxLayout.X_AXIS))
@@ -766,6 +854,25 @@ class actionlistener(ActionListener):
 
     def __init__(self, target):
         self.target = target
+
+
+class border_X_panel(JPanel):
+    def __init__(self):
+        self.setLayout(
+                BoxLayout(
+                    self,
+                    BoxLayout.X_AXIS
+                )
+            )
+        self.setBorder(
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+            )
+
+
+class button_panel(border_X_panel):
+    def __init__(self, title, actionperformed):
+        button = JButton(title, actionPerformed=actionperformed)
+        self.add(button)
 
 
 class Panel_Extension(JPanel):
@@ -911,6 +1018,42 @@ class Panel_Extension(JPanel):
     def _button_save_fields_pressed(self, msg):
         self.save_fields(self._profile_textfield.getText())
 
+    def _button_demo_pressed(self, msg):
+        if JOptionPane.showConfirmDialog(
+            msg.getSource().getParent().getParent(),
+            "This will clear all session handling rules in Burp's \n" +
+            "\"Project options -> Sessions\"\n" +
+            "tab, even rules not produced by this extension. They\n" +
+            "will be replaced with a sample/demo rule containing an\n" +
+            "invoke extension session handler action.\"\n\n" +
+            "A request which can be used for the demo will be sent\n" +
+            "to the Repeater tab.\n\n" +
+            "The demo URL will be placed in the settings, and the\n" +
+            "contents of the \"Cookies to obtain\" list will be\n"+
+            "replaced with a single demo cookie named\n" +
+            "\"ClientSideCookie\"\n\n" +
+            "Please check the PhantomJS settings, then click on\n" +
+            "\'Add a new \"Get Cookies\" session handler\'.\n\n" +
+            "Are you sure you want to remove any existing session\n" +
+            "handling rules?",
+            "Burp Suite / WAF Cookie Fetcher",
+            JOptionPane.YES_NO_OPTION
+        ) == JOptionPane.YES_OPTION:
+            panel_update_cookies = self.getParent().panel_update_cookies
+            for field in \
+                    panel_update_cookies.fields:
+                if "getText" in dir(field) and "getName" in dir(field):
+                    field_name = field.getName()
+                    if field_name == "url":
+                        field.setText(cb.demo_url)
+                    if field_name == "domain":
+                        field.setText(cb.demo_domain)
+            panel_update_cookies._rowpanel2.removeAllElements()
+            panel_update_cookies._rowpanel2.addelement(cb.demo_cookie)
+
+            cb.callbacks.loadConfigFromJson(cb.demo_json)
+            cb.send_url_to_repeater(cb.demo_url)
+
     def _button_quit_pressed(self, msg):
         cb.callbacks.unloadExtension()
 
@@ -935,22 +1078,16 @@ class Panel_Extension(JPanel):
                                 )
         self._profiles_combo.removeItem("0" * 40)
 
-        self._profiles_combo_panel = JPanel()
-        self._profiles_combo_panel.setLayout(
-                                    BoxLayout(
-                                        self._profiles_combo_panel,
-                                        BoxLayout.X_AXIS
-                                        )
-                                    )
-        self._profiles_combo_panel.setBorder(
-                                    BorderFactory.createEmptyBorder(5, 5, 5, 5)
-                                    )
+        self._profiles_combo_panel = border_X_panel()
 
-        self._quit_panel = JPanel()
-        self._quit_panel.setLayout(
-                                BoxLayout(self._quit_panel, BoxLayout.X_AXIS)
+        self._demo_panel = button_panel(
+                            "Demo",
+                            self._button_demo_pressed
                             )
-        self._quit_panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5))
+        self._quit_panel = button_panel(
+                            "Unload WAF Cookie Fetcher",
+                            self._button_quit_pressed
+                            )
 
         self._profile_textfield = \
             PTTextField(
@@ -973,14 +1110,6 @@ class Panel_Extension(JPanel):
 
         self._profiles_combo_panel.add(self._button_delete_profile)
 
-        self._button_quit = \
-            JButton(
-                    "Unload WAF Cookie Fetcher",
-                    actionPerformed=self._button_quit_pressed
-                    )
-
-        self._quit_panel.add(self._button_quit)
-
         self._profiles_combo.addActionListener(actionlistener(self))
 
         self._rowpanel1.add(self._profiles_combo_panel)
@@ -989,6 +1118,7 @@ class Panel_Extension(JPanel):
 
         self._rowpanel1.add(Box.createHorizontalGlue())
 
+        self._rowpanel1.add(self._demo_panel)
         self._rowpanel1.add(self._quit_panel)
 
         self.add(self._rowpanel1)

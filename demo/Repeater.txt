@@ -1,3 +1,0 @@
-GET /waf-cookie-fetcher_test.html HTTP/1.1
-Host: pages.bao7uo.com
-
