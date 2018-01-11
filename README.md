@@ -31,10 +31,8 @@ A lab page is provided (hosted on GitHub Pages) to try out the extension.
 #### Step-by-step
 
 - Load WAF Cookie Fetcher extension in Burp
-- By default the extension contains the correct settings for the demo, so just click 'Add a new "Get cookies" session handler with these settings for these cookies'
-- Then go to Burp's project options tab, navigate to the Sessions Handling Rules section and click on the options cog icon to load the JSON options file from WAF Cookie Fetcher's demo folder (https://github.com/bao7uo/waf-cookie-fetcher/raw/master/demo/waf-cookie-fetcher_test.json). This will add the session handling rule and actions
-- Go to Burp's repeater tab and paste the contents of the txt file from the demo folder (https://github.com/bao7uo/waf-cookie-fetcher/raw/master/demo/Repeater.txt)
-- Add the correct target hostname (pages.bao7uo.com) and port 80 to Repeater
+- By default the extension contains the correct settings for the demo, so just click on the 'Demo' button and follow the instructions.
+- Use the automatically added demo request repeater tab to test the demo.
 
 ![WAF Cookie Fetcher demo screenshot](https://github.com/bao7uo/waf-cookie-fetcher/raw/master/images/demo_screenshot.png)
 
