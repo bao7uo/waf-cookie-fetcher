@@ -21,8 +21,9 @@ The other action types allow features such as the removal of specific named cook
 
 ## Requirements
 
-- Configure Burp Extender Python Environment (Jython)
+- Configure Burp Extender Python Environment (Jython standalone Jar)
 - PhantomJS which can be downloaded and installed from http://phantomjs.org/download.html
+- Supports Windows, Linux and Mac
 
 ## Demo
 
@@ -34,9 +35,11 @@ A lab page is provided (hosted on GitHub Pages) to try out the extension.
 - By default the extension contains the correct settings for the demo, so just click on the 'Demo' button and follow the instructions.
 - Use the automatically added demo request repeater tab to test the demo.
 
-![WAF Cookie Fetcher demo screenshot](https://github.com/bao7uo/waf-cookie-fetcher/raw/master/images/demo_screenshot.png)
+![WAF Cookie Fetcher demo screenshot](https://github.com/bao7uo/waf-cookie-fetcher/raw/master/images/demo1_screenshot.png)
 
 If a cookie appears and the value changes every time you click "Go" in repeater, then the demo is working. As you will be able to see, the JavaScript response from the server is obfuscated, but WAF Cookie Fetcher is obtaining the correct value and placing it in the cookie jar, and Burp is then adding it to the Repeater Request.
+
+![WAF Cookie Fetcher demo screenshot](https://github.com/bao7uo/waf-cookie-fetcher/raw/master/images/demo2_screenshot.png)
 
 ## Usage
 
@@ -102,9 +105,11 @@ This project is still under development.
 - [x] "Test" button to pull in cookies and add them to list
 - [x] Automatically add demo to session rules and repeater
 - [x] Send target URL to repeater
-- [] Burp session management configuration profiles (using load/saveConfigAsJson)
-- [] Allow cookie names to be specified as a regex, or to add all cookies found by PhantomJS
-- [] Get other types of data/fields from phantom
+- [ ] Burp session management configuration profiles (using load/saveConfigAsJson)
+- [ ] Allow cookie names to be specified as a regex, or to add all cookies found by PhantomJS
+- [ ] Get other types of data/fields from phantom
+- [ ] Send to WAF Cookie Fetcher (support for alternative request methods and parameters)
+- [ ] Templates for specific WAFs
 
 ## Contribute
 Contributions, feedback and ideas will be appreciated.
