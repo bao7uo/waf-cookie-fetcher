@@ -2,8 +2,8 @@ Uuid: 0f6ce51c1cb349689ecb4025e8db060a
 ExtensionType: 2
 Name: WAF Cookie Fetcher
 RepoName: waf-cookie-fetcher
-ScreenVersion: 1.0
-SerialVersion: 1
+ScreenVersion: 1.1
+SerialVersion: 2
 MinPlatformVersion: 0
 ProOnly: False
 Author: Paul Taylor, Foregenix Ltd
