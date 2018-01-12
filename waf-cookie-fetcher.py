@@ -100,7 +100,7 @@ class cb():
                         port,
                         True if parsed_url.scheme == "https" else False,
                         request,
-                        "WCF"
+                        "WCF Demo"
                     )
 
 
@@ -1025,7 +1025,7 @@ class Panel_Extension(JPanel):
             "\"Project options -> Sessions\"\n" +
             "tab, even rules not produced by this extension. They\n" +
             "will be replaced with a sample/demo rule containing an\n" +
-            "invoke extension session handler action.\"\n\n" +
+            "invoke extension session handler action.\n\n" +
             "A request which can be used for the demo will be sent\n" +
             "to the Repeater tab.\n\n" +
             "The demo URL will be placed in the settings, and the\n" +
