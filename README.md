@@ -9,7 +9,7 @@
 
 ## Overview
 
-![WAF Cookie Fetcher screenshot](https://github.com/bao7uo/waf-cookie-fetcher/raw/master/images/title_screenshot.png)
+![WAF Cookie Fetcher screenshot](images/title_screenshot.png)
 
 WAF Cookie Fetcher is a Burp Suite extension which allows web application security testers to register various types of cookie-related session handling actions to be performed by the Burp session handling rules.
 
@@ -35,11 +35,11 @@ Load WAF Cookie Fetcher extension in Burp. By default the extension contains the
 2. Click on the "Add..." button which will populate the green field.
 3. Go to the Repeater tab and use the automatically added WCF Demo request.
 
-![WAF Cookie Fetcher demo screenshot](https://github.com/bao7uo/waf-cookie-fetcher/raw/master/images/demo1_screenshot.png)
+![WAF Cookie Fetcher demo screenshot](images/demo1_screenshot.png)
 
 If a cookie appears and the value changes every time you click "Go" in repeater, then the demo is working. As you will be able to see, the JavaScript response from the server is obfuscated, but WAF Cookie Fetcher is obtaining the correct value and placing it in the cookie jar, and Burp is then adding it to the Repeater Request.
 
-![WAF Cookie Fetcher demo screenshot](https://github.com/bao7uo/waf-cookie-fetcher/raw/master/images/demo2_screenshot.png)
+![WAF Cookie Fetcher demo screenshot](images/demo2_screenshot.png)
 
 ## Usage
 
@@ -51,7 +51,7 @@ If a cookie appears and the value changes every time you click "Go" in repeater,
 
 The settings/fields shown in the following screenshot are explained in this section.
 
-![WAF Cookie Fetcher settings screenshot](https://github.com/bao7uo/waf-cookie-fetcher/raw/master/images/settings_screenshot.png)
+![WAF Cookie Fetcher settings screenshot](images/settings_screenshot.png)
 
 #### Set cookies to be valid for domain
 
