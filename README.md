@@ -100,6 +100,7 @@ This project is still under development.
 - Nomenclature
 - MVC pattern
 - Exception handling
+- Source code optimisation
 
 #### Potential future features may include:
 - [x] "Test" button to pull in cookies and add them to list
