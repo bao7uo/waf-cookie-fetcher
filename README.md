@@ -1,7 +1,7 @@
 # WAF Cookie Fetcher - A Burp Suite Extension
 [![BApp Store](https://img.shields.io/badge/BApp-Published-orange.svg)](https://portswigger.net/bappstore/0f6ce51c1cb349689ecb4025e8db060a)
 [![Language](https://img.shields.io/badge/Lang-Python-blue.svg)](https://www.python.org)
-[![License](https://img.shields.io/badge/License-Apache%202.0-red.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
 #### This extension registers custom session handling rule actions which can...
 - use a headless webkit/browser (PhantomJS) to obtain the values of WAF-injected cookies which are calculated in the browser by client-side JavaScript code and then add them to Burp's cookie jar
