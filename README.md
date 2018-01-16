@@ -1,3 +1,5 @@
+<img align="right" src="https://avatars0.githubusercontent.com/u/21125224?s=150&v=4">
+
 # WAF Cookie Fetcher - A Burp Suite Extension
 [![BApp Store](https://img.shields.io/badge/BApp-Published-orange.svg)](https://portswigger.net/bappstore/0f6ce51c1cb349689ecb4025e8db060a)
 [![Language](https://img.shields.io/badge/Lang-Python-blue.svg)](https://www.python.org)
